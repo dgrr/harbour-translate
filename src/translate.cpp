@@ -1,22 +1,17 @@
-#ifdef QT_QML_DEBUG
 #include <QtQuick>
-#endif
+#include <QtQml>
+#include <sailfishapp.h>
 
 #include "t_global.h"
-#include <sailfishapp.h>
-#include <QtQml>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QGuiApplication *app = SailfishApp::application(argc, argv);
     if (app == nullptr) {
-        qDebug() << "SailfishApp::application is nullptr";
         return 1;
     }
 
     QQuickView *view = SailfishApp::createView();
     if (view == nullptr) {
-        qDebug() << "SailfishApp::createView is nullptr";
         return 1;
     }
 

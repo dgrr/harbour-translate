@@ -52,14 +52,31 @@ bool T_Global::isErr() const {
     return m_tr->isErr();
 }
 
+bool T_Global::submit() const {
+    return m_submit;
+}
+
 void T_Global::translate(void) {
     if (m_tr == nullptr)
         return;
 
     if (m_tr->from() != m_tr->to() && m_tr->text().length() > 0) {
-        qDebug() << "Translate";
         m_tr->translate();
+        m_submit = true;
+        emit submitChanged(m_submit);
     }
+}
+
+void T_Global::retranslate(void) {
+    if (m_tr == nullptr)
+        return;
+
+    m_timer->start(500);
+}
+
+void T_Global::finished(void) {
+    m_submit = false;
+    emit submitChanged(m_submit);
 }
 
 void T_Global::setFrom(const QString &from) {
@@ -93,6 +110,7 @@ void T_Global::setText(const QString &text) {
         return;
 
     if (m_tr->text().length() > text.length()) {
+        m_tr->setText(text);
         return;
     }
 
@@ -101,13 +119,17 @@ void T_Global::setText(const QString &text) {
 }
 
 void T_Global::setError(const QString &error) {
-    if (m_tr != nullptr)
-        m_tr->setError(error);
+    if (m_tr == nullptr)
+        return;
+
+    m_tr->setError(error);
 }
 
 void T_Global::setOut(const QString &text) {
-    if (m_tr != nullptr)
-        m_tr->setOut(text);
+    if (m_tr == nullptr)
+        return;
+
+    m_tr->setOut(text);
 }
 
 void T_Global::setPlatform(const int &platform) {
@@ -126,6 +148,11 @@ void T_Global::setPlatform(const int &platform) {
         disconnect(tr, &AbstractTranslator::textChanged,  this, &T_Global::textChanged);
         disconnect(tr, &AbstractTranslator::translated,   this, &T_Global::translated);
         disconnect(tr, &AbstractTranslator::errorChanged, this, &T_Global::errorChanged);
+
+        disconnect(tr, &AbstractTranslator::toChanged,   this, &T_Global::retranslate);
+        disconnect(tr, &AbstractTranslator::fromChanged, this, &T_Global::retranslate);
+
+        disconnect(tr, &AbstractTranslator::finished, this, &T_Global::finished);
     }
 
     connect(m_tr, &AbstractTranslator::fromChanged,  this, &T_Global::fromChanged);
@@ -134,8 +161,10 @@ void T_Global::setPlatform(const int &platform) {
     connect(m_tr, &AbstractTranslator::translated,   this, &T_Global::translated);
     connect(m_tr, &AbstractTranslator::errorChanged, this, &T_Global::errorChanged);
 
-    connect(m_tr, &AbstractTranslator::toChanged,   this, &T_Global::translate);
-    connect(m_tr, &AbstractTranslator::fromChanged, this, &T_Global::translate);
+    connect(m_tr, &AbstractTranslator::toChanged,   this, &T_Global::retranslate);
+    connect(m_tr, &AbstractTranslator::fromChanged, this, &T_Global::retranslate);
+
+    connect(m_tr, &AbstractTranslator::finished, this, &T_Global::finished);
 
     emit platformChanged(platform);
     emit nameChanged(m_tr->name());

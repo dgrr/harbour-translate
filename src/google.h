@@ -10,22 +10,19 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonValue>
-
-#include <QDebug>
+#include <QTimer>
 
 #include "abstract_translator.h"
-
-static const ConvTable GoogleLngTable[] = {
-    {QString("es"), QString("Spanish")},
-    {QString("en"), QString("English")}
-};
+#include "language.h"
 
 class Google : public AbstractTranslator {
     Q_OBJECT
 private:
     QUrl m_url;
+    QList<Language*> m_langs;
     QNetworkAccessManager *m_qnam = nullptr;
 
+    QString getAbbrLng(QString lng);
     QUrlQuery buildQuery(QString str);
     void jsonDecode(QByteArray data);
 

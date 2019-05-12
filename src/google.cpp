@@ -3,6 +3,12 @@
 Google::Google(QObject *parent) : AbstractTranslator(parent) {
     m_url = QUrl("https://translate.google.com/translate_a/single");
     m_qnam = new QNetworkAccessManager();
+    connect(m_qnam, &QNetworkAccessManager::finished, this,  &Google::httpFinished);
+
+    m_langs.append({
+        new Language { "es", "Spanish" },
+        new Language { "en", "English" }
+    });
 }
 
 Google::~Google() {
@@ -21,14 +27,20 @@ void Google::translate() {
     // TODO: Use a user agent list
     req.setHeader(QNetworkRequest::UserAgentHeader, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36");
 
-    m_qnam->get(req);
-    connect(m_qnam, &QNetworkAccessManager::finished, this, &Google::httpFinished);
+    QNetworkReply *reply = m_qnam->get(req);
+    QTimer timer;
+    timer.setSingleShot(true);
+
+    connect(&timer, &QTimer::timeout,         reply, &QNetworkReply::abort);
+    connect(reply,  &QNetworkReply::finished, this,  &AbstractTranslator::finished);
+
+    timer.start(20000); // 20 seconds
 }
 
-QString getAbbrLng(QString lang) {
-    for (ConvTable s : GoogleLngTable) {
-        if (s.lng == lang) {
-            return s.abbr;
+QString Google::getAbbrLng(QString lang) {
+    for (Language *s : m_langs) {
+        if (s->name() == lang) {
+            return s->abbr();
         }
     }
     return "en"; // TODO: Change default.
@@ -124,7 +136,9 @@ void Google::httpFinished(QNetworkReply *reply) {
 void Google::jsonDecode(QByteArray data) {
     QJsonDocument json = QJsonDocument::fromJson(data);
     if (!json.isArray()) {
-        setError("error unmarshalling response: data is not an array");
+        setError(
+            QString("error unmarshalling response: %1").arg(QString(data))
+        );
         return;
     }
     QJsonValue v = json.array().first().toArray().first().toArray().first();

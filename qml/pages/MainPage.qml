@@ -1,15 +1,9 @@
 import QtQuick 2.2
 import Sailfish.Silica 1.0
-import Translator 1.0
 
 Page {
     id: page
     allowedOrientations: Orientation.All
-
-    Translator {
-        id: translator
-        platform: Translator.GOOGLE
-    }
 
     SilicaFlickable {
         anchors.fill: parent
@@ -48,23 +42,44 @@ Page {
                 }
             }
             onValueChanged: translator.from = value;
-        }
-        IconButton {
-            id: iconButton
-            anchors.top: box1.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            icon.source: "image://theme/icon-m-data-download?" + (pressed ? Theme.highlightColor : Theme.primaryColor)
-            width: parent.width
-            onClicked: {
-                var i = box1.currentIndex
-                var v = box1.value
-                box1._updateCurrent(box2.currentIndex, box2.value)
-                box2._updateCurrent(i, v)
+            Behavior on opacity {
+                FadeAnimation{duration: 200}
             }
         }
+
+        IconButton {
+            id: iconButton
+            enabled: !translator.submit
+            opacity: (enabled ? 1 : 0)
+            anchors.top: box1.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            icon.source: "image://theme/icon-m-data-download?" + Theme.primaryColor
+            width: parent.width
+            onClicked: {
+                rotationAnimation.start()
+                hideAnimation.start()
+            }
+            RotationAnimator {
+                id: rotationAnimation
+                target: iconButton;
+                from: 0;
+                to: 180;
+                duration: 300
+                running: false
+            }
+        }
+        BusyIndicator {
+            id: busyIndicator
+            enabled: translator.submit
+            opacity: (enabled ? 1 : 0)
+            anchors.top: box1.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            size: BusyIndicatorSize.Medium
+        }
+
         ComboBox {
             id: box2
-            anchors.top: iconButton.bottom
+            anchors.top: (iconButton.enabled ? iconButton.bottom : busyIndicator.bottom )
             width: parent.width
             currentIndex: 1
             menu: ContextMenu {
@@ -76,6 +91,29 @@ Page {
                 }
             }
             onValueChanged: translator.to = value;
+            Behavior on opacity {
+                FadeAnimation{duration: 200}
+            }
+        }
+
+        ParallelAnimation {
+            id: hideAnimation
+            running: false
+            onStopped: {
+                var i = box1.currentIndex
+                var v = box1.value
+                box1._updateCurrent(box2.currentIndex, box2.value)
+                box2._updateCurrent(i, v)
+                pumpAnimation.start()
+            }
+            OpacityAnimator { target: box1; from: 1; to: 0 }
+            OpacityAnimator { target: box2; from: 1; to: 0 }
+        }
+        ParallelAnimation {
+            id: pumpAnimation
+            running: false
+            OpacityAnimator { target: box1; from: 0; to: 1 }
+            OpacityAnimator { target: box2; from: 0; to: 1 }
         }
 
         TextField {
@@ -90,9 +128,8 @@ Page {
             onTextChanged: translator.text = text
         }
 
-        Rectangle {
+        Item {
             id: r1
-            color: "green"
             anchors.top: input.bottom
             anchors.bottom: outBox.top
             x: Theme.horizontalPageMargin

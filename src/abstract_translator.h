@@ -3,11 +3,6 @@
 
 #include <QObject>
 
-typedef struct {
-    QString abbr;
-    QString lng;
-} ConvTable;
-
 class AbstractTranslator : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString from           READ from           WRITE setFrom   NOTIFY fromChanged )
@@ -26,7 +21,7 @@ public:
     explicit AbstractTranslator(QObject *parent = nullptr);
     virtual ~AbstractTranslator();
 
-    virtual QString name() const = 0;
+    virtual QString name()  const = 0;
 
     QString from()  const;
     QString to()    const;
@@ -51,6 +46,7 @@ signals:
     void translated(const QString &text);
     void textChanged(const QString &text);
     void errorChanged(const bool &isErr);
+    void finished(void);
 };
 
 #endif // ABSTRACT_TRANSLATOR_H
