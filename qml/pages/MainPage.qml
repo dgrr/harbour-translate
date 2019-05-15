@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import Sailfish.Silica 1.0
+import Translator 1.0
 
 Page {
     id: page
@@ -14,10 +15,12 @@ Page {
                 onClicked: translator.platform = Translator.GOOGLE
             }
             MenuItem {
+                enabled: false
                 text: qsTr("Yandex")
                 onClicked: translator.platform = Translator.YANDEX
             }
             MenuItem {
+                enabled: false
                 text: qsTr("Deepl")
                 onClicked: translator.platform = Translator.DEEPL
             }
@@ -34,11 +37,11 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             currentIndex: 0
             menu: ContextMenu {
-                MenuItem {
-                    text: qsTr("Spanish")
-                }
-                MenuItem {
-                    text: qsTr("English")
+                Repeater {
+                    model: translator.langs.length
+                    MenuItem {
+                        text: qsTr(translator.langs[index])
+                    }
                 }
             }
             onValueChanged: translator.from = value;
@@ -83,11 +86,11 @@ Page {
             width: parent.width
             currentIndex: 1
             menu: ContextMenu {
-                MenuItem {
-                    text: qsTr("Spanish")
-                }
-                MenuItem {
-                    text: qsTr("English")
+                Repeater {
+                    model: translator.langs.length
+                    MenuItem {
+                        text: qsTr(translator.langs[index])
+                    }
                 }
             }
             onValueChanged: translator.to = value;
@@ -116,7 +119,7 @@ Page {
             OpacityAnimator { target: box2; from: 0; to: 1 }
         }
 
-        TextField {
+        TextArea {
             id: input
             anchors.top: box2.bottom
             width: parent.width
@@ -125,7 +128,9 @@ Page {
             font.pixelSize: Theme.fontSizeLarge
             autoScrollEnabled: true
             horizontalAlignment: TextEdit.AlignHCenter
-            onTextChanged: translator.text = text
+            onTextChanged: {
+                translator.text = text
+            }
         }
 
         Item {

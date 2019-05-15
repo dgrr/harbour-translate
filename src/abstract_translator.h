@@ -21,7 +21,8 @@ public:
     explicit AbstractTranslator(QObject *parent = nullptr);
     virtual ~AbstractTranslator();
 
-    virtual QString name()  const = 0;
+    virtual QString name()         const = 0;
+    virtual QList<QString> langs() const = 0;
 
     QString from()  const;
     QString to()    const;

@@ -16,10 +16,9 @@
 #include "language.h"
 
 class Google : public AbstractTranslator {
-    Q_OBJECT
 private:
     QUrl m_url;
-    QList<Language*> m_langs;
+    Languages m_langs;
     QNetworkAccessManager *m_qnam = nullptr;
 
     QString getAbbrLng(QString lng);
@@ -30,7 +29,8 @@ public:
     explicit Google(QObject *parent = nullptr);
     ~Google();
 
-    QString name() const final;
+    QString name()         const final;
+    QList<QString> langs() const final;
 
     // translate translated str from the language parsed in `SetFrom`
     // to the string parsed in `SetTo`.
@@ -38,9 +38,6 @@ public:
 
 private slots:
     void httpFinished(QNetworkReply *reply);
-
-signals:
-    void nameChanged(const QString &name);
 };
 
 #endif // Google_H

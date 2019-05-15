@@ -4,7 +4,6 @@ Google::Google(QObject *parent) : AbstractTranslator(parent) {
     m_url = QUrl("https://translate.google.com/translate_a/single");
     m_qnam = new QNetworkAccessManager();
     connect(m_qnam, &QNetworkAccessManager::finished, this,  &Google::httpFinished);
-
     m_langs.append({
         new Language { "es", "Spanish" },
         new Language { "en", "English" }
@@ -19,12 +18,17 @@ QString Google::name() const {
     return "Google";
 }
 
+QList<QString> Google::langs() const {
+    return m_langs.toList();
+}
+
 void Google::translate() {
     QUrl url(m_url);
     url.setQuery(buildQuery(m_text));
 
     QNetworkRequest req(url);
     // TODO: Use a user agent list
+    req.setRawHeader("Referrer Policy", "no-referrer-when-downgrade");
     req.setHeader(QNetworkRequest::UserAgentHeader, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36");
 
     QNetworkReply *reply = m_qnam->get(req);
@@ -38,7 +42,7 @@ void Google::translate() {
 }
 
 QString Google::getAbbrLng(QString lang) {
-    for (Language *s : m_langs) {
+    for (Language *s : m_langs.list()) {
         if (s->name() == lang) {
             return s->abbr();
         }

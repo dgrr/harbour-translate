@@ -15,4 +15,14 @@ public:
     QString name() const;
 };
 
+class Languages {
+private:
+    QList<Language *> m_langs;
+    QList<QString> m_names;
+public:
+    void append(const QList<Language *> &t);
+    QList<QString> toList()  const;
+    QList<Language *> list() const;
+};
+
 #endif // LANGUAGE_H

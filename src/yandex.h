@@ -2,16 +2,30 @@
 #define YANDEX_H
 
 #include <QObject>
+#include <QUrl>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
-class Yandex : public QObject
-{
-    Q_OBJECT
+#include "abstract_translator.h"
+#include "language.h"
+
+class Yandex : public AbstractTranslator {
+private:
+    QUrl m_url;
+    Languages m_langs;
+    QNetworkAccessManager *m_qnam = nullptr;
 public:
     explicit Yandex(QObject *parent = nullptr);
+    ~Yandex();
 
-signals:
+    QString name() const final;
+    QList<QString> langs() const final;
 
-public slots:
+    void translate() final;
+
+private slots:
+    void httpFinished(QNetworkReply *reply);
 };
 
 #endif // YANDEX_H

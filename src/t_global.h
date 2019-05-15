@@ -16,14 +16,15 @@
 
 class T_Global : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QString from           READ from         WRITE setFrom     NOTIFY fromChanged    )
-    Q_PROPERTY(QString to             READ to           WRITE setTo       NOTIFY toChanged      )
-    Q_PROPERTY(bool    isErr          READ isErr                          NOTIFY errorChanged   )
-    Q_PROPERTY(QString text           READ text         WRITE setText     NOTIFY textChanged    )
-    Q_PROPERTY(QString out            READ out                            NOTIFY translated     )
-    Q_PROPERTY(QString name           READ name                           NOTIFY nameChanged    )
-    Q_PROPERTY(int platform           READ platform     WRITE setPlatform NOTIFY platformChanged)
-    Q_PROPERTY(bool submit            READ submit                         NOTIFY submitChanged  )
+    Q_PROPERTY(QString from           READ from         WRITE setFrom     NOTIFY fromChanged            )
+    Q_PROPERTY(QString to             READ to           WRITE setTo       NOTIFY toChanged              )
+    Q_PROPERTY(bool    isErr          READ isErr                          NOTIFY errorChanged           )
+    Q_PROPERTY(QString text           READ text         WRITE setText     NOTIFY textChanged            )
+    Q_PROPERTY(QString out            READ out                            NOTIFY translated             )
+    Q_PROPERTY(QString name           READ name                           NOTIFY nameChanged            )
+    Q_PROPERTY(int platform           READ platform     WRITE setPlatform NOTIFY platformChanged        )
+    Q_PROPERTY(bool submit            READ submit                         NOTIFY submitChanged          )
+    Q_PROPERTY(QList<QString> langs   READ langs                          NOTIFY supportedLangsChanged  )
 public:
     explicit T_Global(QObject *parent = nullptr);
     ~T_Global();
@@ -45,10 +46,12 @@ public:
     QString text()   const;
     bool    isErr()  const;
     bool    submit() const;
+    QList<QString> langs() const;
 
 private:
     int m_current = NONE;
     int m_submit = false;
+    QList<QString> m_langs;
     AbstractTranslator *m_tr    = nullptr;
     AbstractTranslator *m_pl[MAX_PLATFORM];
     QTimer             *m_timer = nullptr;
@@ -73,6 +76,7 @@ signals:
     void textChanged(const QString &text);
     void errorChanged(const bool &isErr);
     void platformChanged(const int &platform);
+    void supportedLangsChanged(QList<QString> list);
     void submitChanged(const bool &submit);
 };
 

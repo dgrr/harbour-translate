@@ -22,12 +22,14 @@ CoverBackground {
 
     Label {
         id: text
+        width: parent.width
         anchors.top: from.bottom
-        horizontalAlignment: Theme.horizontalPageMargin
+        horizontalAlignment: TextInput.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         color: Theme.primaryColor
-        font.pixelSize: Theme.fontSizeLarge
+        font.pixelSize: Theme.fontSizeMedium
         text: qsTr(translator.text)
+        truncationMode: TruncationMode.Elide
     }
 
     Label {
@@ -43,11 +45,20 @@ CoverBackground {
 
     Label {
         id: out
+        width: parent.width
         anchors.top: to.bottom
-        horizontalAlignment: Theme.horizontalPageMargin
+        horizontalAlignment: TextInput.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         color: Theme.primaryColor
-        font.pixelSize: Theme.fontSizeLarge
+        font.pixelSize: Theme.fontSizeMedium
         text: qsTr(translator.out)
+        truncationMode: TruncationMode.Elide
+    }
+
+    Image {
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        asynchronous: true
+        source: "qrc:///icons/128x128/translate.png"
     }
 }

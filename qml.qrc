@@ -3,5 +3,6 @@
         <file>qml/translate.qml</file>
         <file>qml/pages/MainPage.qml</file>
         <file>qml/cover/CoverPage.qml</file>
+        <file>icons/128x128/translate.png</file>
     </qresource>
 </RCC>

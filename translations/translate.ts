@@ -11,14 +11,6 @@
 <context>
     <name>MainPage</name>
     <message>
-        <source>Spanish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Google</source>
         <translation type="unfinished"></translation>
     </message>

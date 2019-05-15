@@ -1,10 +1,12 @@
 #include "t_global.h"
 
 T_Global::T_Global(QObject *parent) : QObject(parent) {
-    m_pl[GOOGLE] = new Google(this);
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(translate()));
+    m_pl[GOOGLE] = new Google(this);
+    m_pl[YANDEX] = new Yandex(this);
+    m_pl[DEEPL]  = new Deepl(this);
 }
 
 T_Global::~T_Global(void) {
@@ -46,6 +48,13 @@ QString T_Global::text() const {
     return m_tr->text();
 }
 
+QList<QString> T_Global::langs() const {
+    if (m_tr == nullptr) {
+        return QList<QString>();
+    }
+    return m_tr->langs();
+}
+
 bool T_Global::isErr() const {
     if (m_tr == nullptr)
         return false;
@@ -59,6 +68,8 @@ bool T_Global::submit() const {
 void T_Global::translate(void) {
     if (m_tr == nullptr)
         return;
+    if (m_submit)
+        return; // do not submit more than one request at a time
 
     if (m_tr->from() != m_tr->to() && m_tr->text().length() > 0) {
         m_tr->translate();
@@ -108,11 +119,6 @@ void T_Global::setTo(const QString &to) {
 void T_Global::setText(const QString &text) {
     if (m_tr == nullptr)
         return;
-
-    if (m_tr->text().length() > text.length()) {
-        m_tr->setText(text);
-        return;
-    }
 
     m_timer->start(2000);
     m_tr->setText(text);
@@ -168,4 +174,5 @@ void T_Global::setPlatform(const int &platform) {
 
     emit platformChanged(platform);
     emit nameChanged(m_tr->name());
+    emit supportedLangsChanged(m_tr->langs());
 }
