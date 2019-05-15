@@ -4,5 +4,6 @@
         <file>qml/pages/MainPage.qml</file>
         <file>qml/cover/CoverPage.qml</file>
         <file>icons/128x128/translate.png</file>
+        <file>qml/settings/Settings.qml</file>
     </qresource>
 </RCC>

@@ -35,7 +35,15 @@ Page {
             id: box1
             anchors.top: pageHeader.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            currentIndex: 0
+            currentIndex: {
+                for (var i = 0; i < translator.langs.length; i++) {
+                    var lang = translator.langs[i]
+                    if (lang === settings.lastFrom.value) {
+                        return i;
+                    }
+                }
+                return 0;
+            }
             menu: ContextMenu {
                 Repeater {
                     model: translator.langs.length
@@ -44,7 +52,11 @@ Page {
                     }
                 }
             }
-            onValueChanged: translator.from = value;
+            onValueChanged: {
+                settings.lastFrom.value = value
+                translator.from = value;
+                //settings.lastFrom.sync()
+            }
             Behavior on opacity {
                 FadeAnimation{duration: 200}
             }
@@ -84,7 +96,15 @@ Page {
             id: box2
             anchors.top: (iconButton.enabled ? iconButton.bottom : busyIndicator.bottom )
             width: parent.width
-            currentIndex: 1
+            currentIndex: {
+                for (var i = 0; i < translator.langs.length; i++) {
+                    var lang = translator.langs[i]
+                    if (lang === settings.lastTo.value) {
+                        return i;
+                    }
+                }
+                return 1;
+            }
             menu: ContextMenu {
                 Repeater {
                     model: translator.langs.length
@@ -93,7 +113,11 @@ Page {
                     }
                 }
             }
-            onValueChanged: translator.to = value;
+            onValueChanged: {
+                settings.lastTo.value = value
+                translator.to = value;
+                //settings.lastTo.sync()
+            }
             Behavior on opacity {
                 FadeAnimation{duration: 200}
             }

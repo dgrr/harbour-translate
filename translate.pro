@@ -22,7 +22,7 @@ SOURCES += src/translate.cpp \
     src/yandex.cpp \
     src/deepl.cpp \
     src/abstract_translator.cpp \
-    language.cpp
+    language.cpp \
 
 DISTFILES += qml/translate.qml \
     rpm/translate.changes.in \
@@ -30,8 +30,7 @@ DISTFILES += qml/translate.qml \
     rpm/translate.spec \
     rpm/translate.yaml \
     translations/*.ts \
-    translate.desktop \
-    qml/pages/MainPage.qml
+    translate.desktop
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
