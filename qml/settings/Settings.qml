@@ -17,6 +17,13 @@ Page {
         defaultValue: ""
     }
 
-    property alias lastTo : settingsLastTo
-    property alias lastFrom : settingsLastFrom
+    ConfigurationValue {
+        id: settingsTranslations
+        key: path+"/translations"
+        defaultValue: []
+    }
+
+    property alias lastTo : settingsLastTo.value
+    property alias lastFrom : settingsLastFrom.value
+    property alias translations : settingsTranslations.value
 }

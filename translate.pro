@@ -1,3 +1,5 @@
+include ($$PWD/libQtQmlTricks/libQtQmlTricks-3.0.pri)
+
 TARGET = translate
 
 CONFIG += sailfishapp

@@ -1,0 +1,3 @@
+[submodule "libQtQmlTricks"]
+	path = libQtQmlTricks
+	url = http://gitlab.unique-conception.org/qt-qml-tricks/ui-elements-ng

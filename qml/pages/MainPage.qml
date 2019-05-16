@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import Sailfish.Silica 1.0
 import Translator 1.0
+import QtQmlTricks 3.0
 
 Page {
     id: page
@@ -38,7 +39,7 @@ Page {
             currentIndex: {
                 for (var i = 0; i < translator.langs.length; i++) {
                     var lang = translator.langs[i]
-                    if (lang === settings.lastFrom.value) {
+                    if (lang === settings.lastFrom) {
                         return i;
                     }
                 }
@@ -53,7 +54,7 @@ Page {
                 }
             }
             onValueChanged: {
-                settings.lastFrom.value = value
+                settings.lastFrom = value
                 translator.from = value;
                 //settings.lastFrom.sync()
             }
@@ -99,7 +100,7 @@ Page {
             currentIndex: {
                 for (var i = 0; i < translator.langs.length; i++) {
                     var lang = translator.langs[i]
-                    if (lang === settings.lastTo.value) {
+                    if (lang === settings.lastTo) {
                         return i;
                     }
                 }
@@ -114,7 +115,7 @@ Page {
                 }
             }
             onValueChanged: {
-                settings.lastTo.value = value
+                settings.lastTo = value
                 translator.to = value;
                 //settings.lastTo.sync()
             }
@@ -157,12 +158,28 @@ Page {
             }
         }
 
-        Item {
+        Flickable {
             id: r1
             anchors.top: input.bottom
             anchors.bottom: outBox.top
             x: Theme.horizontalPageMargin
             width: parent.width - Theme.horizontalPageMargin*2
+            ColumnContainer {
+                anchors.fill: parent
+                Repeater {
+                    model: settings.translations.length
+                    RowContainer {
+                        TextField {
+                            enabled: false
+                            Container.horizontalStretch: 1
+                            horizontalAlignment: TextInput.AlignHCenter
+                            font.pixelSize: Theme.fontSizeMedium
+                            text: qsTr(settings.translations[index])
+                            ExtraAnchors.horizontalFill: parent
+                        }
+                    }
+                }
+            }
         }
 
         TextArea {
@@ -176,6 +193,11 @@ Page {
             horizontalAlignment: TextEdit.AlignHCenter
             text: translator.out
             autoScrollEnabled: true
+            onTextChanged: {
+                var t = settings.translations
+                t.push(text)
+                settings.translations = t
+            }
         }
     }
 }
