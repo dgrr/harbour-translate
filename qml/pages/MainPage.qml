@@ -57,10 +57,11 @@ Page {
             onValueChanged: {
                 settings.lastFrom = value
                 translator.from = value;
-                //settings.lastFrom.sync()
             }
             Behavior on opacity {
-                FadeAnimation{duration: 200}
+                FadeAnimation {
+                    duration: 200
+                }
             }
         }
 
@@ -168,6 +169,14 @@ Page {
             onTextChanged: {
                 translator.text = text
             }
+        }
+        IconButton {
+            enabled: input.text.length > 0
+            opacity: enabled ? 1 : 0
+            anchors.right: parent.right
+            anchors.top: box2.bottom
+            icon.source: "image://theme/icon-m-clear?"+Theme.primaryColor
+            onClicked: input.text = ""
         }
 
         TextArea {
