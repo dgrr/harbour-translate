@@ -7,23 +7,30 @@ Page {
 
     ConfigurationValue {
         id: settingsLastFrom
-        key: path+"/lastFrom"
+        key: path + "/lastFrom"
         defaultValue: ""
     }
 
     ConfigurationValue {
         id: settingsLastTo
-        key: path+"/lastTo"
+        key: path + "/lastTo"
         defaultValue: ""
     }
 
     ConfigurationValue {
         id: settingsTranslations
-        key: path+"/translations"
+        key: path + "/translations"
+        defaultValue: []
+    }
+
+    ConfigurationValue {
+        id: settingsFavLangs
+        key: path + "/favs"
         defaultValue: []
     }
 
     property alias lastTo : settingsLastTo.value
     property alias lastFrom : settingsLastFrom.value
     property alias translations : settingsTranslations.value
+    property alias favLangs : settingsFavLangs.value
 }
