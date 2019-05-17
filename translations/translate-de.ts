@@ -2,14 +2,11 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
-    <name>CoverPage</name>
-    <message>
-        <source>Translator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MainPage</name>
+    <message>
+        <source></source>
+        <translation></translation>
+    </message>
     <message>
         <source>Google</source>
         <translation type="unfinished"></translation>
@@ -27,6 +24,10 @@
     <name>RightPage</name>
     <message>
         <source>  &gt;  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
