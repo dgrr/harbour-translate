@@ -5,10 +5,10 @@ import "settings"
 import Translator 1.0
 
 ApplicationWindow {
-    Translator {
-        id: translator
-        platform: Translator.GOOGLE
-    }
+    property string lastFrom : ""
+    property string lastTo: ""
+    property string lastText : ""
+    property string lastOut : ""
 
     Settings {
         id: settings

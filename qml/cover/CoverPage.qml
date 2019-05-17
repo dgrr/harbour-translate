@@ -36,7 +36,7 @@ CoverBackground {
             anchors.horizontalCenter: parent.horizontalCenter
             color: Theme.secondaryColor
             font.pixelSize: Theme.fontSizeMedium
-            text: qsTr(translator.from)
+            text: qsTr(lastFrom)
         }
 
         Label {
@@ -53,7 +53,7 @@ CoverBackground {
             anchors.horizontalCenter: parent.horizontalCenter
             color: Theme.secondaryColor
             font.pixelSize: Theme.fontSizeMedium
-            text: qsTr(translator.to)
+            text: qsTr(lastTo)
         }
 
         Label {
