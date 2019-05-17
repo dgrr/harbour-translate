@@ -1,64 +1,68 @@
-import QtQuick 2.0
+import QtQuick 2.6
 import Sailfish.Silica 1.0
+import QtQmlTricks 3.0
+import "../components"
 
 CoverBackground {
-    Label {
-        id: title
-        anchors.topMargin: Theme.paddingLarge
-        anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: Theme.fontSizeLarge
-        text: qsTr("Translator")
-    }
-
-    Label {
-        id: from
-        anchors.topMargin: Theme.paddingLarge*2
-        anchors.top: title.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: Theme.secondaryColor
-        font.pixelSize: Theme.fontSizeMedium
-        text: qsTr(translator.from)
-    }
-
-    Label {
-        id: text
-        width: parent.width
-        anchors.top: from.bottom
-        horizontalAlignment: TextInput.AlignHCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: Theme.primaryColor
-        font.pixelSize: Theme.fontSizeMedium
-        text: qsTr(translator.text)
-        truncationMode: TruncationMode.Elide
-    }
-
-    Label {
-        id: to
-        anchors.topMargin: Theme.paddingLarge
-        anchors.top: text.bottom
-        horizontalAlignment: Theme.horizontalPageMargin
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: Theme.secondaryColor
-        font.pixelSize: Theme.fontSizeMedium
-        text: qsTr(translator.to)
-    }
-
-    Label {
-        id: out
-        width: parent.width
-        anchors.top: to.bottom
-        horizontalAlignment: TextInput.AlignHCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: Theme.primaryColor
-        font.pixelSize: Theme.fontSizeMedium
-        text: qsTr(translator.out)
-        truncationMode: TruncationMode.Elide
-    }
-
+    id: cover
     Image {
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        asynchronous: true
-        source: "qrc:///icons/128x128/translate.png"
+        height: width;
+        opacity: 0.15;
+        anchors {
+            topMargin: (cover.height * +0.05);
+            leftMargin: (cover.width * -0.05);
+            rightMargin: (cover.width * +0.05);
+        }
+        source: "qrc:///icons/128x128/translate.png";
+        ExtraAnchors.topDock: parent;
+    }
+
+    ColumnContainer {
+        spacing: Theme.paddingLarge;
+        anchors {
+            margins: Theme.paddingLarge;
+            verticalCenter: parent.verticalCenter;
+        }
+        ExtraAnchors.horizontalFill: parent;
+
+        LabelFixed {
+            text: "Translator";
+            color: Theme.primaryColor;
+            font.pixelSize: Theme.fontSizeLarge;
+            anchors.horizontalCenter: parent.horizontalCenter;
+        }
+
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Theme.secondaryColor
+            font.pixelSize: Theme.fontSizeMedium
+            text: qsTr(translator.from)
+        }
+
+        Label {
+            horizontalAlignment: TextInput.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Theme.primaryColor
+            font.pixelSize: Theme.fontSizeMedium
+            text: qsTr(lastText)
+            truncationMode: TruncationMode.Elide
+        }
+
+        Label {
+            horizontalAlignment: Theme.horizontalPageMargin
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Theme.secondaryColor
+            font.pixelSize: Theme.fontSizeMedium
+            text: qsTr(translator.to)
+        }
+
+        Label {
+            horizontalAlignment: TextInput.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Theme.primaryColor
+            font.pixelSize: Theme.fontSizeMedium
+            text: qsTr(lastOut)
+            truncationMode: TruncationMode.Elide
+        }
     }
 }
