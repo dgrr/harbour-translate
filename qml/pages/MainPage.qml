@@ -8,6 +8,14 @@ Page {
     id: page
     allowedOrientations: Orientation.All
 
+    Translator {
+        id: translator
+        platform: Translator.GOOGLE
+        onSubmitChanged: {
+            lastText = input.text
+        }
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -38,25 +46,59 @@ Page {
             anchors.top: pageHeader.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             currentIndex: {
-                for (var i = 0; i < translator.langs.length; i++) {
-                    var lang = translator.langs[i]
+                var i;
+                var lang;
+                for (i = 0; i < settings.favLangs.length; i++) {
+                    lang = settings.favLangs[i].lang
                     if (lang === settings.lastFrom) {
                         return i;
                     }
                 }
-                return 0;
+                for (i = 0; i < translator.langs.length; i++) {
+                    lang = translator.langs[i]
+                    if (lang === settings.lastFrom) {
+                        return i + settings.favLangs.length;
+                    }
+                }
+                return 0 + settings.favLangs.length;
             }
             menu: ContextMenu {
+                Repeater {
+                    model: settings.favLangs.length
+                    MenuItem {
+                        text: qsTr(settings.favLangs[index].lang)
+                        color: Theme.highlightColor
+                    }
+                }
+
                 Repeater {
                     model: translator.langs.length
                     MenuItem {
                         text: qsTr(translator.langs[index])
+                        color: Theme.primaryColor
                     }
                 }
             }
             onValueChanged: {
+                var langs = settings.favLangs
+                var from = translator.from
+
+                lastFrom = value
+
                 settings.lastFrom = value
                 translator.from = value;
+                if (from == "") {
+                    return;
+                }
+
+                for (var i in langs) {
+                    if (langs[i].lang === value) {
+                        langs[i].usages++
+                        return;
+                    }
+                }
+                langs.push({usages: 1, lang: value})
+                settings.favLangs = langs
             }
             Behavior on opacity {
                 FadeAnimation {
@@ -89,10 +131,18 @@ Page {
         BusyIndicator {
             id: busyIndicator
             enabled: translator.submit
-            opacity: (enabled ? 1 : 0)
+            opacity: enabled ? 1 : 0
             anchors.top: box1.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             size: BusyIndicatorSize.Medium
+        }
+        IconButton {
+            id: stopButton
+            enabled: translator.submit
+            opacity: enabled ? 1 : 0
+            anchors.centerIn: busyIndicator
+            icon.source: "image://theme/icon-m-clear?"+Theme.primaryColor
+            onClicked: input.text = ""
         }
         IconButton {
             id: btnNextPage
@@ -111,26 +161,61 @@ Page {
             anchors.top: (iconButton.enabled ? iconButton.bottom : busyIndicator.bottom )
             width: parent.width
             currentIndex: {
-                for (var i = 0; i < translator.langs.length; i++) {
-                    var lang = translator.langs[i]
+                var i;
+                var lang;
+                for (i = 0; i < settings.favLangs.length; i++) {
+                    lang = settings.favLangs[i].lang
                     if (lang === settings.lastTo) {
                         return i;
                     }
                 }
-                return 1;
+
+                for (i = 0; i < translator.langs.length; i++) {
+                    lang = translator.langs[i]
+                    if (lang === settings.lastTo) {
+                        return i + settings.favLangs.length;
+                    }
+                }
+                return 3;
             }
             menu: ContextMenu {
+                Repeater {
+                    model: settings.favLangs.length
+                    MenuItem {
+                        text: qsTr(settings.favLangs[index].lang)
+                        color: Theme.highlightColor
+                    }
+                    anchors.bottomMargin: Theme.paddingLarge
+                }
+
                 Repeater {
                     model: translator.langs.length
                     MenuItem {
                         text: qsTr(translator.langs[index])
+                        color: Theme.primaryColor
                     }
                 }
             }
             onValueChanged: {
+                var langs = settings.favLangs
+                var to = translator.to
+
+                lastTo = value
+
                 settings.lastTo = value
-                translator.to = value;
-                //settings.lastTo.sync()
+                translator.to = value
+                if (to == "") {
+                    return;
+                }
+
+                for (var i in langs) {
+                    if (langs[i].lang === value) {
+                        langs[i].usages++
+                        return;
+                    }
+                }
+                langs.push({usages: 1, lang: value})
+                settings.favLangs = langs
             }
             Behavior on opacity {
                 FadeAnimation{duration: 200}
@@ -159,8 +244,12 @@ Page {
 
         TextArea {
             id: input
-            anchors.top: box2.bottom
-            width: parent.width
+            anchors {
+                top: box2.bottom
+                left: parent.left
+                leftMargin: clearButton.width
+                right: clearButton.left
+            }
             placeholderText: qsTr(box1.value + " text...")
             color: Theme.primaryColor
             font.pixelSize: Theme.fontSizeLarge
@@ -171,6 +260,7 @@ Page {
             }
         }
         IconButton {
+            id: clearButton
             enabled: input.text.length > 0
             opacity: enabled ? 1 : 0
             anchors.right: parent.right
@@ -198,10 +288,11 @@ Page {
                             return; // should not be repeated
                         }
                     }
+                    lastOut = text
                     texts.push({
                                    from: box1.value,
                                    to: box2.value,
-                                   text: input.text,
+                                   text: lastText,
                                    res: text
                                })
                     settings.translations = texts
