@@ -20,6 +20,7 @@ Page {
 
             ColumnContainer {
                 width: parent.width
+
                 RowContainer {
                     id: titleRow
                     width: parent.width
@@ -76,7 +77,7 @@ Page {
             menu: ContextMenu {
                 MenuItem {
                     text: "Remove"
-                    onClicked: {
+                    onClicked: Remorse.itemAction(delegate, qsTr("Deleting"), function () {
                         var texts = settings.translations
                         var nTexts = [];
                         for (var i in texts) {
@@ -85,7 +86,7 @@ Page {
                             }
                         }
                         settings.translations = nTexts
-                    }
+                    })
                 }
             }
         }
