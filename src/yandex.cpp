@@ -27,5 +27,4 @@ void Yandex::translate() {
 }
 
 void Yandex::httpFinished(QNetworkReply *reply) {
-
 }

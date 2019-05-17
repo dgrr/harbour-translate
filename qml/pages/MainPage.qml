@@ -2,6 +2,7 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 import Translator 1.0
 import QtQmlTricks 3.0
+import "../components"
 
 Page {
     id: page
@@ -92,6 +93,17 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             size: BusyIndicatorSize.Medium
         }
+        IconButton {
+            id: btnNextPage
+            enabled: !translator.submit
+            opacity: enabled ? 1 : 0
+            anchors.top: box1.bottom
+            anchors.right: parent.right
+            icon.source: "image://theme/icon-m-right?"+Theme.primaryColor
+            onClicked: {
+                var dialog = pageStack.push(dialogTranslated)
+            }
+        }
 
         ComboBox {
             id: box2
@@ -158,30 +170,6 @@ Page {
             }
         }
 
-        Flickable {
-            id: r1
-            anchors.top: input.bottom
-            anchors.bottom: outBox.top
-            x: Theme.horizontalPageMargin
-            width: parent.width - Theme.horizontalPageMargin*2
-            ColumnContainer {
-                anchors.fill: parent
-                Repeater {
-                    model: settings.translations.length
-                    RowContainer {
-                        TextField {
-                            enabled: false
-                            Container.horizontalStretch: 1
-                            horizontalAlignment: TextInput.AlignHCenter
-                            font.pixelSize: Theme.fontSizeMedium
-                            text: qsTr(settings.translations[index])
-                            ExtraAnchors.horizontalFill: parent
-                        }
-                    }
-                }
-            }
-        }
-
         TextArea {
             id: outBox
             anchors.bottom: parent.bottom
@@ -194,10 +182,27 @@ Page {
             text: translator.out
             autoScrollEnabled: true
             onTextChanged: {
-                var t = settings.translations
-                t.push(text)
-                settings.translations = t
+                if (!translator.isErr) {
+                    var texts = settings.translations
+                    for (var i in texts) {
+                        if (texts[i].res === text && texts[i].text === input.text) {
+                            return; // should not be repeated
+                        }
+                    }
+                    texts.push({
+                                   from: box1.value,
+                                   to: box2.value,
+                                   text: input.text,
+                                   res: text
+                               })
+                    settings.translations = texts
+                }
             }
         }
+    }
+
+    Component {
+        id: dialogTranslated
+        RightPage {}
     }
 }

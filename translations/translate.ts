@@ -23,4 +23,11 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>RightPage</name>
+    <message>
+        <source>  &gt;  </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

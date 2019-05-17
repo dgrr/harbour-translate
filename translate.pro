@@ -32,7 +32,9 @@ DISTFILES += qml/translate.qml \
     rpm/translate.spec \
     rpm/translate.yaml \
     translations/*.ts \
-    translate.desktop
+    translate.desktop \
+    qml/pages/RightPage.qml \
+    qml/components/RightPage.qml
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
