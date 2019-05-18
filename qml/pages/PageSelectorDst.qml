@@ -112,13 +112,7 @@ Page {
                         }
                         onClicked: {
                             var langs = settings.favLangs
-                            var to = translator.to // if previusly don't exists
-
                             settings.lastTo = value
-                            if (to == "") { // nothing to add to fav
-                                pageStack.pop()
-                                return;
-                            }
 
                             for (var i = 0; i < langs.length; i++) {
                                 if (langs[i].lang === value) {

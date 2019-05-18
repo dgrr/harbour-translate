@@ -41,36 +41,37 @@ Page {
             title: qsTr(translator.name)
         }
 
-        MouseArea {
+        TextField {
             id: box1
-            property alias value: firstLabel.text
-            anchors.top: pageHeader.bottom
+            readOnly: true
             width: parent.width
-            height: firstLabel.height + Theme.paddingLarge
-            Label {
-                id: firstLabel
-                text: settings.lastFrom
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: Theme.fontSizeLarge
-                onTextChanged: {
-                    translator.from = text
-                    lastFrom = text
-                }
+            anchors {
+                top: pageHeader.bottom
+            }
+            text: settings.lastFrom
+            color: Theme.primaryColor
+            horizontalAlignment: TextInput.AlignHCenter
+            placeholderText: "From..."
+            font.pixelSize: Theme.fontSizeLarge
+            onTextChanged: {
+                translator.from = text
+                lastFrom = text
             }
             onClicked: {
-                console.log(value)
                 pageStack.push(dialogSelectorFrom)
             }
+            property alias value : box1.text
         }
 
         IconButton {
             id: iconButton
             enabled: !translator.submit
             opacity: (enabled ? 1 : 0)
-            anchors.top: box1.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors {
+                top: box1.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
             icon.source: "image://theme/icon-m-data-download?" + Theme.primaryColor
-            width: parent.width
             onClicked: {
                 rotationAnimation.start()
                 hideAnimation.start()
@@ -88,15 +89,18 @@ Page {
             id: busyIndicator
             enabled: translator.submit
             opacity: enabled ? 1 : 0
-            anchors.top: box1.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors {
+                centerIn: iconButton
+            }
             size: BusyIndicatorSize.Medium
         }
         IconButton {
             id: stopButton
             enabled: translator.submit
             opacity: enabled ? 1 : 0
-            anchors.centerIn: busyIndicator
+            anchors {
+                centerIn: busyIndicator
+            }
             icon.source: "image://theme/icon-m-clear?" + Theme.primaryColor
             onClicked: input.text = ""
         }
@@ -104,33 +108,37 @@ Page {
             id: btnNextPage
             enabled: !translator.submit
             opacity: enabled ? 1 : 0
-            anchors.top: box1.bottom
-            anchors.right: parent.right
+            anchors {
+                top: box1.bottom
+                right: parent.right
+            }
             icon.source: "image://theme/icon-m-right?" + Theme.primaryColor
             onClicked: {
                 var dialog = pageStack.push(dialogTranslated)
             }
         }
 
-        MouseArea {
+        TextField {
             id: box2
-            property alias value: secondLabel.text
-            anchors.top: (iconButton.enabled ? iconButton.bottom : busyIndicator.bottom)
+            readOnly: true
             width: parent.width
-            height: secondLabel.height + Theme.paddingLarge
-            Label {
-                id: secondLabel
-                text: settings.lastTo
-                font.pixelSize: Theme.fontSizeLarge
-                anchors.horizontalCenter: parent.horizontalCenter
-                onTextChanged: {
-                    translator.to = text
-                    lastTo = text
-                }
+            anchors {
+                top: (iconButton.enabled ? iconButton.bottom : busyIndicator.bottom)
+                topMargin: Theme.paddingLarge
+            }
+            text: settings.lastTo
+            color: Theme.primaryColor
+            horizontalAlignment: TextInput.AlignHCenter
+            placeholderText: "To..."
+            font.pixelSize: Theme.fontSizeLarge
+            onTextChanged: {
+                translator.to = text
+                lastTo = text
             }
             onClicked: {
                 pageStack.push(dialogSelectorTo)
             }
+            property alias value : box2.text
         }
 
         ParallelAnimation {
@@ -177,7 +185,7 @@ Page {
                 leftMargin: clearButton.width
                 right: clearButton.left
             }
-            placeholderText: qsTr(box1.value + " text...")
+            placeholderText: box1.value.length > 0 ? qsTr(box1.value + " text...") : ""
             color: Theme.primaryColor
             font.pixelSize: Theme.fontSizeLarge
             autoScrollEnabled: true

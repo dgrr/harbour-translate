@@ -27,7 +27,6 @@ SOURCES += src/translate.cpp \
     language.cpp
 
 DISTFILES += qml/translate.qml \
-    rpm/translate.changes.in \
     rpm/translate.changes.run.in \
     rpm/translate.spec \
     rpm/translate.yaml \
@@ -36,7 +35,8 @@ DISTFILES += qml/translate.qml \
     qml/components/LabelFixed.qml \
     qml/pages/PageTranslated.qml \
     qml/pages/PageSelectorSrc.qml \
-    qml/pages/PageSelectorDst.qml
+    qml/pages/PageSelectorDst.qml \
+    rpm/translate.changes
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 

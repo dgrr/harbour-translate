@@ -1,18 +1,7 @@
-# Rename this file as translate.changes to include changelog
-# entries in your RPM file.
-#
-# Add new changelog entries following the format below.
-# Add newest entries to the top of the list.
-# Separate entries from eachother with a blank line.
-#
-# Alternatively, if your changelog is automatically generated (e.g. with
-# the git-change-log command provided with Sailfish OS SDK), create a
-# translate.changes.run script to let mb2 run the required commands for you.
-
-# * date Author's Name <author's email> version-release
-# - Summary of changes
-
-# * Sun Apr 13 2014 Jack Tar <jack.tar@example.com> 0.0.1-1
-# - Scrubbed the deck
-# - Hoisted the sails
+* Sat May 18 2019 Dario GR <dgarriga@yandex.com> 0.1.5
+- Changed cover page.
+- Added remove animation on the `Translated text` items menu.
+- Added last used languages in the selector menus.
+- Added button to clean the input.
+- Added button to cancel translation request. (Not implemented yet, just added the button)
 

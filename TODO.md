@@ -6,4 +6,5 @@
 - Implement Yandex and Deepl.
 - Make a good separator in the language selector.
 - Fix remove error on the translated list.
-- Overflow error on translated texts
+- Overflow error on translated texts.
+- Assign IDs on the translated texts.

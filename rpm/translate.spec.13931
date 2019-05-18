@@ -9,10 +9,10 @@ Name:       translate
 # << macros
 
 Summary:    translate
-Version:    0.2
+Version:    0.1
 Release:    1
 Group:      Qt/Qt
-License:    MIT
+License:    LICENSE
 URL:        https://github.com/dgrr
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  translate.yaml
@@ -24,7 +24,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Sailfish translator app using Google, Yandex and Deepl services.
+Short description of my Sailfish OS Application
 
 
 %prep
