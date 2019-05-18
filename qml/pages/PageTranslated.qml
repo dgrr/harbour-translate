@@ -1,6 +1,6 @@
 import QtQuick 2.2
 import Sailfish.Silica 1.0
-import QtQmlTricks 3.0;
+import QtQmlTricks 3.0
 
 Page {
     id: page
@@ -15,8 +15,8 @@ Page {
         delegate: ListItem {
             id: delegate
             x: Theme.horizontalPageMargin
-            width: parent.width - Theme.horizontalPageMargin*2
-            property string labelText : settings.translations[index].res
+            width: parent.width - Theme.horizontalPageMargin * 2
+            property string labelText: settings.translations[index].res
 
             ColumnContainer {
                 width: parent.width
@@ -77,19 +77,21 @@ Page {
             menu: ContextMenu {
                 MenuItem {
                     text: "Remove"
-                    onClicked: Remorse.itemAction(delegate, qsTr("Removing"), function () {
-                        var texts = settings.translations
-                        var nTexts = [];
-                        for (var i in texts) {
-                            if (texts[i].res !== delegate.labelText) {
-                                nTexts.push(texts[i])
-                            }
-                        }
-                        settings.translations = nTexts
-                    })
+                    onClicked: Remorse.itemAction(delegate, qsTr("Removing"),
+                                                  function () {
+                                                      var texts = settings.translations
+                                                      var nTexts = []
+                                                      for (var i in texts) {
+                                                          if (texts[i].res !== delegate.labelText) {
+                                                              nTexts.push(texts[i])
+                                                          }
+                                                      }
+                                                      settings.translations = nTexts
+                                                  })
                 }
             }
         }
-        VerticalScrollDecorator {}
+        VerticalScrollDecorator {
+        }
     }
 }

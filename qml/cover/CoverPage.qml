@@ -6,30 +6,30 @@ import "../components"
 CoverBackground {
     id: cover
     Image {
-        height: width;
-        opacity: 0.15;
+        height: width
+        opacity: 0.15
         anchors {
-            topMargin: (cover.height * +0.05);
-            leftMargin: (cover.width * -0.05);
-            rightMargin: (cover.width * +0.05);
+            topMargin: (cover.height * +0.05)
+            leftMargin: (cover.width * -0.05)
+            rightMargin: (cover.width * +0.05)
         }
-        source: "qrc:///icons/128x128/translate.png";
-        ExtraAnchors.topDock: parent;
+        source: "qrc:///icons/128x128/translate.png"
+        ExtraAnchors.topDock: parent
     }
 
     ColumnContainer {
-        spacing: Theme.paddingLarge;
+        spacing: Theme.paddingLarge
         anchors {
-            margins: Theme.paddingLarge;
-            verticalCenter: parent.verticalCenter;
+            margins: Theme.paddingLarge
+            verticalCenter: parent.verticalCenter
         }
-        ExtraAnchors.horizontalFill: parent;
+        ExtraAnchors.horizontalFill: parent
 
         LabelFixed {
-            text: "Translator";
-            color: Theme.primaryColor;
-            font.pixelSize: Theme.fontSizeLarge;
-            anchors.horizontalCenter: parent.horizontalCenter;
+            text: "Translator"
+            color: Theme.primaryColor
+            font.pixelSize: Theme.fontSizeLarge
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
         Label {

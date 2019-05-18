@@ -58,7 +58,8 @@ Page {
                     Label {
                         text: qsTr(settings.favLangs[index].lang)
                         anchors.fill: parent
-                        color: (settings.favLangs[index].lang === translator.to) ? Theme.highlightColor : Theme.primaryColor
+                        color: (settings.favLangs[index].lang
+                                === translator.to) ? Theme.highlightColor : Theme.primaryColor
                     }
 
                     onPressAndHold: {
@@ -108,7 +109,8 @@ Page {
                         Label {
                             text: qsTr(translator.langs[index])
                             anchors.fill: parent
-                            color: (translator.langs[index] === translator.to) ? Theme.highlightColor : Theme.primaryColor
+                            color: (translator.langs[index]
+                                    === translator.to) ? Theme.highlightColor : Theme.primaryColor
                         }
                         onClicked: {
                             var langs = settings.favLangs
@@ -118,10 +120,13 @@ Page {
                                 if (langs[i].lang === value) {
                                     langs[i].usages++
                                     pageStack.pop()
-                                    return;
+                                    return
                                 }
                             }
-                            langs.push({usages: 1, lang: value})
+                            langs.push({
+                                           "usages": 1,
+                                           "lang": value
+                                       })
                             settings.favLangs = langs
 
                             pageStack.pop()

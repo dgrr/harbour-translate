@@ -60,7 +60,7 @@ Page {
             onClicked: {
                 pageStack.push(dialogSelectorFrom)
             }
-            property alias value : box1.text
+            property alias value: box1.text
         }
 
         IconButton {
@@ -138,7 +138,7 @@ Page {
             onClicked: {
                 pageStack.push(dialogSelectorTo)
             }
-            property alias value : box2.text
+            property alias value: box2.text
         }
 
         ParallelAnimation {
@@ -221,7 +221,8 @@ Page {
                     for (var i in texts) {
                         if (texts[i].res === text
                                 && texts[i].text === input.text) {
-                            return // should not be repeated
+                            return
+                            // should not be repeated
                         }
                     }
                     lastOut = text
@@ -244,10 +245,12 @@ Page {
     }
     Component {
         id: dialogSelectorFrom
-        PageSelectorSrc {}
+        PageSelectorSrc {
+        }
     }
     Component {
         id: dialogSelectorTo
-        PageSelectorDst {}
+        PageSelectorDst {
+        }
     }
 }

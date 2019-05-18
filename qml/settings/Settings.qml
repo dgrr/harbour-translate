@@ -1,6 +1,6 @@
 import QtQuick 2.2
 import Nemo.Configuration 1.0
-import Sailfish.Silica 1.0;
+import Sailfish.Silica 1.0
 
 Page {
     property string path: "/apps/translator"
@@ -29,8 +29,8 @@ Page {
         defaultValue: []
     }
 
-    property alias lastTo : settingsLastTo.value
-    property alias lastFrom : settingsLastFrom.value
-    property alias translations : settingsTranslations.value
-    property alias favLangs : settingsFavLangs.value
+    property alias lastTo: settingsLastTo.value
+    property alias lastFrom: settingsLastFrom.value
+    property alias translations: settingsTranslations.value
+    property alias favLangs: settingsFavLangs.value
 }
