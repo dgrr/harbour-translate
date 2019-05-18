@@ -77,7 +77,7 @@ Page {
             menu: ContextMenu {
                 MenuItem {
                     text: "Remove"
-                    onClicked: Remorse.itemAction(delegate, qsTr("Deleting"), function () {
+                    onClicked: Remorse.itemAction(delegate, qsTr("Removing"), function () {
                         var texts = settings.translations
                         var nTexts = [];
                         for (var i in texts) {

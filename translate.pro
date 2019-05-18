@@ -33,8 +33,10 @@ DISTFILES += qml/translate.qml \
     rpm/translate.yaml \
     translations/*.ts \
     translate.desktop \
-    qml/components/RightPage.qml \
-    qml/components/LabelFixed.qml
+    qml/components/LabelFixed.qml \
+    qml/pages/PageTranslated.qml \
+    qml/pages/PageSelectorSrc.qml \
+    qml/pages/PageSelectorDst.qml
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
