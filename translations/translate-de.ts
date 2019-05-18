@@ -21,13 +21,27 @@
     </message>
 </context>
 <context>
-    <name>RightPage</name>
+    <name>PageSelectorDst</name>
+    <message>
+        <source>Removing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageSelectorSrc</name>
+    <message>
+        <source>Removing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageTranslated</name>
     <message>
         <source>  &gt;  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Deleting</source>
+        <source>Removing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

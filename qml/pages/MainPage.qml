@@ -236,12 +236,10 @@ Page {
     }
     Component {
         id: dialogSelectorFrom
-        PageSelectorSrc {
-        }
+        PageSelectorSrc {}
     }
     Component {
         id: dialogSelectorTo
-        PageSelectorDst {
-        }
+        PageSelectorDst {}
     }
 }
