@@ -6,7 +6,7 @@ import "../pages"
 
 Page {
     id: page
-    allowedOrientations: Orientation.All
+    allowedOrientations: Orientation.Portrait | Orientation.Landscape
 
     Translator {
         id: translator
@@ -187,7 +187,7 @@ Page {
                 topMargin: Theme.paddingLarge
                 left: parent.left
                 leftMargin: clearButton.width
-                right: clearButton.left
+                right: page.orientation == Orientation.Portrait ? clearButton.left : submitLandscapeButton.left
             }
             placeholderText: box1.value.length > 0 ? qsTr(box1.value + " text...") : ""
             color: Theme.primaryColor
@@ -197,6 +197,7 @@ Page {
             onTextChanged: {
                 translator.text = text
             }
+            focus: activeFocus && !translator.submit
 
             states: State {
                 when: input.activeFocus
@@ -222,19 +223,30 @@ Page {
             onClicked: input.text = ""
         }
         Button { // this button does not submit the request, just hides the keyboard
-            id: submitButton
-            enabled: input.activeFocus && input.softwareInputPanelEnabled
+            // only works when orientation == Portrait
+            id: submitPortraitButton
+            enabled: input.activeFocus && input.softwareInputPanelEnabled && page.orientation == Orientation.Portrait
             opacity: enabled ? 1 : 0
             anchors {
                 top: input.bottom
                 horizontalCenter: input.horizontalCenter
             }
 
-            onClicked: {
-                input.focus = false
-            }
+            onClicked: input.focus = false
 
             text: qsTr("Translate")
+        }
+        IconButton {
+            id: submitLandscapeButton
+            enabled: input.activeFocus && input.softwareInputPanelEnabled && page.orientation != Orientation.Portrait
+            opacity: enabled ? 1 : 0
+            icon.source: "image://theme/icon-m-right?"+Theme.primaryColor
+            anchors {
+                top: pageHeader.bottom
+                right: parent.right
+            }
+
+            onClicked: input.focus = false
         }
 
         TextArea {
@@ -242,7 +254,7 @@ Page {
             anchors.bottom: parent.bottom
             width: parent.width
             enabled: false
-            opacity: (text.length > 0) ? 1 : 0
+            opacity: (text.length > 0 && !input.activeFocus ) ? 1 : 0
             color: (translator.isErr) ? "red" : Theme.primaryColor
             font.pixelSize: Theme.fontSizeLarge
             horizontalAlignment: TextEdit.AlignHCenter
