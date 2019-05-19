@@ -213,7 +213,7 @@ Page {
         }
         IconButton {
             id: clearButton
-            enabled: input.text.length > 0
+            enabled: input.text.length > 0 && !input.activeFocus
             opacity: enabled ? 1 : 0
             anchors.right: parent.right
             anchors.top: box2.bottom

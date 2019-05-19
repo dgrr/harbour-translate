@@ -25,58 +25,44 @@ Page {
             itemHeight: Theme.itemSizeSmall
             model: settings.favLangs.length
 
-            delegate: BackgroundItem {
+            delegate: ListItem {
                 id: delegate
                 width: parent.width
                 property string value: settings.favLangs[index].lang
 
-                ContextMenu {
-                    id: removeMenu
-
+                menu: ContextMenu {
                     MenuItem {
                         text: "Remove"
                         width: parent.width
-                        onClicked: Remorse.itemAction(delegate,
-                                                      qsTr("Removing"),
-                                                      function () {
-                                                          var texts = settings.favLangs
-                                                          var nTexts = []
-                                                          for (var i in texts) {
-                                                              if (texts[i].lang
-                                                                      !== delegate.value) {
-                                                                  nTexts.push(texts[i])
+                        onClicked: delegate.remorseAction("Removing",
+                                                          function () {
+                                                              var texts = settings.favLangs
+                                                              var nTexts = []
+                                                              for (var i in texts) {
+                                                                  if (texts[i].lang
+                                                                          !== delegate.value) {
+                                                                      nTexts.push(texts[i])
+                                                                  }
                                                               }
-                                                          }
-                                                          settings.favLangs = nTexts
-                                                      })
+                                                              settings.favLangs = nTexts
+                                                          })
                     }
                 }
 
-                MouseArea {
+                Label {
                     anchors.fill: parent
+                    text: qsTr(settings.favLangs[index].lang)
+                    color: (settings.favLangs[index].lang
+                            === translator.to) ? Theme.highlightColor : Theme.primaryColor
+                }
 
-                    Label {
-                        text: qsTr(settings.favLangs[index].lang)
-                        anchors.fill: parent
-                        color: (settings.favLangs[index].lang
-                                === translator.to) ? Theme.highlightColor : Theme.primaryColor
+                onClicked: {
+                    settings.lastTo = value
+                    settings.favLangs[index].usages++
+                    if (delegate.menuOpen) { // fixes an error
+                        delegate.closeMenu()
                     }
-
-                    onPressAndHold: {
-                        removeMenu.open(delegate)
-                    }
-
-                    onReleased: {
-                        if (removeMenu.active) {
-                            removeMenu.close()
-                        }
-                    }
-
-                    onClicked: {
-                        settings.lastTo = value
-                        settings.favLangs[index].usages++
-                        pageStack.pop()
-                    }
+                    pageStack.pop()
                 }
             }
 
@@ -87,7 +73,7 @@ Page {
 
                 Separator {
                     color: Theme.primaryColor
-                    width: parent.width
+                    ExtraAnchors.horizontalFill: parent
                 }
             }
 
@@ -107,8 +93,8 @@ Page {
                     MouseArea {
                         anchors.fill: parent
                         Label {
-                            text: qsTr(translator.langs[index])
                             anchors.fill: parent
+                            text: qsTr(translator.langs[index])
                             color: (translator.langs[index]
                                     === translator.to) ? Theme.highlightColor : Theme.primaryColor
                         }

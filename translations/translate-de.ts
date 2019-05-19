@@ -21,20 +21,6 @@
     </message>
 </context>
 <context>
-    <name>PageSelectorDst</name>
-    <message>
-        <source>Removing</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PageSelectorSrc</name>
-    <message>
-        <source>Removing</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PageTranslated</name>
     <message>
         <source>Removing</source>

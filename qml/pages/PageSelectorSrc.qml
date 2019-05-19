@@ -25,58 +25,44 @@ Page {
             itemHeight: Theme.itemSizeSmall
             model: settings.favLangs.length
 
-            delegate: BackgroundItem {
+            delegate: ListItem {
                 id: delegate
                 width: parent.width
                 property string value: settings.favLangs[index].lang
 
-                ContextMenu {
-                    id: removeMenu
-
+                menu: ContextMenu {
                     MenuItem {
                         text: "Remove"
                         width: parent.width
-                        onClicked: Remorse.itemAction(delegate,
-                                                      qsTr("Removing"),
-                                                      function () {
-                                                          var texts = settings.favLangs
-                                                          var nTexts = []
-                                                          for (var i in texts) {
-                                                              if (texts[i].lang
-                                                                      !== delegate.value) {
-                                                                  nTexts.push(texts[i])
+                        onClicked: delegate.remorseAction("Removing",
+                                                          function () {
+                                                              var texts = settings.favLangs
+                                                              var nTexts = []
+                                                              for (var i in texts) {
+                                                                  if (texts[i].lang
+                                                                          !== delegate.value) {
+                                                                      nTexts.push(texts[i])
+                                                                  }
                                                               }
-                                                          }
-                                                          settings.favLangs = nTexts
-                                                      })
+                                                              settings.favLangs = nTexts
+                                                          })
                     }
                 }
 
-                MouseArea {
+                Label {
                     anchors.fill: parent
+                    text: qsTr(settings.favLangs[index].lang)
+                    color: (settings.favLangs[index].lang
+                            === translator.from) ? Theme.highlightColor : Theme.primaryColor
+                }
 
-                    Label {
-                        anchors.fill: parent
-                        text: qsTr(settings.favLangs[index].lang)
-                        color: (settings.favLangs[index].lang
-                                === translator.from) ? Theme.highlightColor : Theme.primaryColor
+                onClicked: {
+                    settings.lastFrom = value
+                    settings.favLangs[index].usages++
+                    if (delegate.menuOpen) { // fixes an error
+                        delegate.closeMenu()
                     }
-
-                    onPressAndHold: {
-                        removeMenu.open(delegate)
-                    }
-
-                    onReleased: {
-                        if (removeMenu.active) {
-                            removeMenu.close()
-                        }
-                    }
-
-                    onClicked: {
-                        settings.lastFrom = value
-                        settings.favLangs[index].usages++
-                        pageStack.pop()
-                    }
+                    pageStack.pop()
                 }
             }
 
