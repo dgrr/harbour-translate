@@ -87,7 +87,7 @@ Page {
 
                 Separator {
                     color: Theme.primaryColor
-                    ExtraAnchors.horizontalFill: parent
+                    width: parent.width
                 }
             }
 

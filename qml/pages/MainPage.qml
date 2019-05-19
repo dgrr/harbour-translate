@@ -43,6 +43,8 @@ Page {
 
         TextField {
             id: box1
+            enabled: !input.activeFocus
+            opacity: enabled ? 1 : 0
             readOnly: true
             width: parent.width
             anchors {
@@ -65,7 +67,7 @@ Page {
 
         IconButton {
             id: iconButton
-            enabled: !translator.submit
+            enabled: !translator.submit && !input.activeFocus
             opacity: (enabled ? 1 : 0)
             anchors {
                 top: box1.bottom
@@ -120,6 +122,8 @@ Page {
 
         TextField {
             id: box2
+            enabled: !input.activeFocus
+            opacity: enabled ? 1 : 0
             readOnly: true
             width: parent.width
             anchors {
@@ -192,6 +196,19 @@ Page {
             horizontalAlignment: TextEdit.AlignHCenter
             onTextChanged: {
                 translator.text = text
+            }
+            states: State {
+                when: input.activeFocus
+                AnchorChanges {
+                    target: input
+                    anchors.top: pageHeader.bottom
+                }
+            }
+
+            transitions: Transition {
+                AnchorAnimation {
+                    duration: 100
+                }
             }
         }
         IconButton {

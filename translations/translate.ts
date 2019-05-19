@@ -37,10 +37,6 @@
 <context>
     <name>PageTranslated</name>
     <message>
-        <source>  &gt;  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Removing</source>
         <translation type="unfinished"></translation>
     </message>

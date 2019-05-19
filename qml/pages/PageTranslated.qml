@@ -4,92 +4,144 @@ import QtQmlTricks 3.0
 
 Page {
     id: page
+
     SilicaListView {
-        id: listView
-        model: settings.translations.length
         anchors.fill: parent
         header: PageHeader {
             title: "Translated text"
         }
 
+        model: ListModel {
+            function groupByLang() {
+                var content = []
+                // content = [{
+                //      title: string
+                //      contents: [{
+                //          from: string
+                //          to: string
+                //      }]
+                // }]
+                var texts = settings.translations
+                for (var i = 0; i < texts.length; i++) {
+                    var shouldAdd = true
+                    var text = texts[i]
+                    var title = text.from + " > " + text.to
+                    for (var j = 0; j < content.length; j++) {
+                        if (content[j].title === title) {
+                            shouldAdd = false
+                            content[j].contents.push({
+                                                         "from": text.text,
+                                                         "to": text.res
+                                                     })
+                            break
+                        }
+                    }
+                    if (shouldAdd) {
+                        content.push({
+                                         "title": title,
+                                         "contents": [{
+                                                 "from": text.text,
+                                                 "to": text.res
+                                             }]
+                                     })
+                    }
+                }
+                return content
+            }
+            Component.onCompleted: {
+                append(groupByLang())
+            }
+        }
+
         delegate: ListItem {
-            id: delegate
+            id: delegateItem
             x: Theme.horizontalPageMargin
-            width: parent.width - Theme.horizontalPageMargin * 2
-            property string labelText: settings.translations[index].res
+            width: parent.width
+            height: columnContainer.height
+            property string value : title
 
-            ColumnContainer {
+            Column {
+                id: columnContainer
                 width: parent.width
+                anchors.topMargin: Theme.paddingLarge * 10
 
-                RowContainer {
-                    id: titleRow
+                Label {
+                    anchors.left: parent.left
+                    text: title
+                    color: Theme.secondaryColor
+                }
+
+                ColumnView {
                     width: parent.width
-                    Container.horizontalStretch: 1
-                    ExtraAnchors.horizontalFill: parent
+                    itemHeight: Theme.itemSizeSmall
+                    model: contents
+                    delegate: ListItem {
+                        id: listItem
+                        width: parent.width
+                        property string value : to // TODO: Change it to an id
 
-                    Label {
-                        id: fromLabel
-                        anchors.left: parent.left
-                        text: settings.translations[index].from
-                        color: Theme.secondaryColor
+                        Column {
+                            width: parent.width
+
+                            Label {
+                                text: "> "+from
+                                anchors {
+                                    leftMargin: Theme.paddingLarge
+                                    left: parent.left
+                                }
+                                horizontalAlignment: Text.AlignHCenter
+                                color: Theme.primaryColor
+                                wrapMode: Label.WordWrap
+                            }
+
+                            Label {
+                                text: "> "+to
+                                anchors {
+                                    leftMargin: Theme.paddingLarge
+                                    left: parent.left
+                                }
+                                horizontalAlignment: Text.AlignHCenter
+                                color: Theme.primaryColor
+                                wrapMode: Label.WordWrap
+                            }
+
+                            Separator {
+                                width: parent.width
+                                color: Theme.primaryColor
+                            }
+                        }
+                        openMenuOnPressAndHold: false
+                        onClicked: listItem.openMenu()
+                        menu: ContextMenu {
+                            id: ctxMenu
+                            MenuItem {
+                                text: "Remove"
+                                onClicked: listItem.remorseAction(qsTr("Removing"), function() {
+                                                                  var texts = settings.translations
+                                                                  var nTexts = []
+                                                                  for (var i = 0; i < texts.length; i++) {
+                                                                      if (texts[i].res !== listItem.value) {
+                                                                          nTexts.push(texts[i])
+                                                                      }
+                                                                  }
+                                                                  settings.translations = nTexts
+                                                              })
+                            }
+                        }
                     }
-
-                    Label {
-                        id: slabel
-                        anchors.left: fromLabel.right
-                        text: qsTr("  >  ")
-                        color: Theme.secondaryColor
-                    }
-
-                    Label {
-                        anchors.left: slabel.right
-                        text: settings.translations[index].to
-                        color: Theme.secondaryColor
-                    }
-                }
-
-                RowContainer {
-                    anchors.top: titleRow.bottom
-                    Container.horizontalStretch: 1
-                    ExtraAnchors.horizontalFill: parent
-
-                    Label {
-                        id: textLabel
-                        text: settings.translations[index].text
-                        color: Theme.primaryColor
-                    }
-
-                    Label {
-                        id: separatorLabel
-                        text: qsTr("  >  ")
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        color: Theme.secondaryColor
-                    }
-
-                    Label {
-                        anchors.left: separatorLabel.right
-                        text: settings.translations[index].res
-                        color: Theme.primaryColor
-                    }
-                }
-            }
-
-            menu: ContextMenu {
-                MenuItem {
-                    text: "Remove"
-                    onClicked: Remorse.itemAction(delegate, qsTr("Removing"),
-                                                  function () {
-                                                      var texts = settings.translations
-                                                      var nTexts = []
-                                                      for (var i in texts) {
-                                                          if (texts[i].res !== delegate.labelText) {
-                                                              nTexts.push(texts[i])
-                                                          }
-                                                      }
-                                                      settings.translations = nTexts
-                                                  })
                 }
             }
+            /*menu: Remorse.itemAction(delegateItem, qsTr("Removing"),
+                                     function () {
+                                         var texts = settings.translations
+                                         var nTexts = []
+                                         for (var i in texts) {
+                                             if (texts[i].res !== delegateItem.labelText) {
+                                                 nTexts.push(texts[i])
+                                             }
+                                         }
+                                         settings.translations = nTexts
+                                     })*/
         }
         VerticalScrollDecorator {
         }
