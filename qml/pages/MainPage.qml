@@ -197,6 +197,7 @@ Page {
             onTextChanged: {
                 translator.text = text
             }
+
             states: State {
                 when: input.activeFocus
                 AnchorChanges {
@@ -219,6 +220,21 @@ Page {
             anchors.top: box2.bottom
             icon.source: "image://theme/icon-m-clear?" + Theme.primaryColor
             onClicked: input.text = ""
+        }
+        Button { // this button does not submit the request, just hides the keyboard
+            id: submitButton
+            enabled: input.activeFocus && input.softwareInputPanelEnabled
+            opacity: enabled ? 1 : 0
+            anchors {
+                top: input.bottom
+                horizontalCenter: input.horizontalCenter
+            }
+
+            onClicked: {
+                input.focus = false
+            }
+
+            text: qsTr("Translate")
         }
 
         TextArea {

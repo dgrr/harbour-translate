@@ -19,6 +19,10 @@
         <source>Deepl</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Translate</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageTranslated</name>
