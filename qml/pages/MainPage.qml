@@ -45,10 +45,21 @@ Page {
             id: box1
             enabled: !input.activeFocus
             opacity: enabled ? 1 : 0
+            width: parent.width / 3
             readOnly: true
-            width: parent.width
             anchors {
                 top: pageHeader.bottom
+                right: {
+                    if (page.orientation == Orientation.Landscape) {
+                        return iconButton.left
+                    }
+                }
+
+                horizontalCenter: {
+                    if (page.orientation == Orientation.Portrait) {
+                        return parent.horizontalCenter
+                    }
+                }
             }
             text: settings.lastFrom
             color: Theme.primaryColor
@@ -78,6 +89,31 @@ Page {
                 rotationAnimation.start()
                 hideAnimation.start()
             }
+
+            states: State {
+                when: page.orientation == Orientation.Landscape
+                AnchorChanges {
+                    target: iconButton
+                    anchors.top: pageHeader.bottom
+                }
+                PropertyChanges {
+                    target: iconButton
+                    rotation: 90
+                }
+            }
+
+            transitions: Transition {
+                ParallelAnimation {
+                    AnchorAnimation {
+                        duration: 200
+                    }
+                    RotationAnimation {
+                        duration: 200
+                        direction: RotationAnimation.Clockwise
+                    }
+                }
+            }
+
             RotationAnimator {
                 id: rotationAnimation
                 target: iconButton
@@ -108,10 +144,10 @@ Page {
         }
         IconButton {
             id: btnNextPage
-            enabled: !translator.submit
+            enabled: !translator.submit && !input.activeFocus
             opacity: enabled ? 1 : 0
             anchors {
-                top: box1.bottom
+                top: page.orientation == Orientation.Portrait ? box1.bottom : pageHeader.bottom
                 right: parent.right
             }
             icon.source: "image://theme/icon-m-right?" + Theme.primaryColor
@@ -124,11 +160,26 @@ Page {
             id: box2
             enabled: !input.activeFocus
             opacity: enabled ? 1 : 0
+            width: parent.width / 3
             readOnly: true
-            width: parent.width
             anchors {
-                top: (iconButton.enabled ? iconButton.bottom : busyIndicator.bottom)
-                topMargin: Theme.paddingLarge
+                top: {
+                    if (page.orientation == Orientation.Landscape) {
+                        return pageHeader.bottom
+                    }
+                    return (iconButton.enabled ? iconButton.bottom : busyIndicator.bottom)
+                }
+                topMargin: page.orientation == Orientation.Landscape ? 0 : Theme.paddingLarge
+                left: {
+                    if (page.orientation == Orientation.Landscape) {
+                        return (iconButton.enabled ? iconButton.right : busyIndicator.right)
+                    }
+                }
+                horizontalCenter: {
+                    if (page.orientation == Orientation.Portrait) {
+                        return parent.horizontalCenter
+                    }
+                }
             }
             text: settings.lastTo
             color: Theme.primaryColor

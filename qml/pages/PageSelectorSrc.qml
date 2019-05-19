@@ -4,6 +4,7 @@ import QtQmlTricks 3.0
 
 Page {
     id: page
+    allowedOrientations: Orientation.All
 
     SilicaFlickable {
         anchors.fill: parent
