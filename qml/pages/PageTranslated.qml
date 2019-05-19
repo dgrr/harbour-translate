@@ -57,7 +57,7 @@ Page {
         delegate: ListItem {
             id: delegateItem
             x: Theme.horizontalPageMargin
-            width: parent.width
+            width: parent.width - Theme.horizontalPageMargin*2
             height: columnContainer.height
             property string value : title
 
