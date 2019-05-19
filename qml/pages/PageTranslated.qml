@@ -13,6 +13,7 @@ Page {
         }
 
         model: ListModel {
+            id: listModel
             function groupByLang() {
                 var content = []
                 // content = [{
@@ -49,9 +50,13 @@ Page {
                 }
                 return content
             }
-            Component.onCompleted: {
-                append(groupByLang())
+
+            function complete() {
+                listModel.clear()
+                listModel.append(groupByLang())
             }
+
+            Component.onCompleted: listModel.complete()
         }
 
         delegate: ListItem {
@@ -126,6 +131,7 @@ Page {
                                                                       }
                                                                   }
                                                                   settings.translations = nTexts
+                                                                  listModel.complete()
                                                               })
                             }
                         }
